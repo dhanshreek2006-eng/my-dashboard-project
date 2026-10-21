@@ -256,8 +256,9 @@ def analytics(request):
         "selling_price"
     ]
 
-    for col in numeric_columns:
-        df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
+    if not df.empty:
+        for col in numeric_columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
 
     # Default values
     total_products = len(df)
@@ -369,50 +370,48 @@ def smart_insights(request):
     )
 
     df = pd.DataFrame(list(products))
-    for col in ["current_stock", "minimum_stock", "purchase_price", "selling_price"]:
-        df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
+
+    # Default values: they always exist, whatever happens below
     insights = []
+    total_products = len(df)
+    inventory_value = 0
+    low_stock_count = 0
 
     if df.empty:
-        total_products = 0
-        inventory_value = 0
-        low_stock_count = 0
-        
+        insights.append("No products yet. Add products to see insights.")
     else:
+        # Convert columns to numbers (only safe when columns exist)
+        for col in ["current_stock", "minimum_stock", "purchase_price", "selling_price"]:
+            df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
+
         # Low-stock products
         low_stock = df[df["current_stock"] <= df["minimum_stock"]]
+        low_stock_count = len(low_stock)
 
         for _, product in low_stock.iterrows():
             insights.append(
                 f"Restock {product['name']}: only "
-                f"{product['current_stock']} units remain."
+                f"{int(product['current_stock'])} units remain."
             )
 
-        # Products with no stock
+        # Out-of-stock products
         out_of_stock = df[df["current_stock"] == 0]
 
         for _, product in out_of_stock.iterrows():
-            insights.append(
-                f"URGENT: {product['name']} is out of stock."
-            )
+            insights.append(f"URGENT: {product['name']} is out of stock.")
 
         # Highest inventory investment
-        df["stock_value"] = (
-            df["current_stock"] * df["purchase_price"]
-        )
+        df["stock_value"] = df["current_stock"] * df["purchase_price"]
+        inventory_value = float(df["stock_value"].sum())
 
         highest_value = df.loc[df["stock_value"].idxmax()]
-
         insights.append(
             f"Highest inventory investment: {highest_value['name']} "
             f"(₹{highest_value['stock_value']:.2f})."
         )
 
-        # Products with potentially low profit margins
-        df["profit_per_unit"] = (
-            df["selling_price"] - df["purchase_price"]
-        )
-
+        # Low profit margins
+        df["profit_per_unit"] = df["selling_price"] - df["purchase_price"]
         low_margin = df[df["profit_per_unit"] <= 0]
 
         for _, product in low_margin.iterrows():
@@ -422,19 +421,13 @@ def smart_insights(request):
             )
 
         if not insights:
-            insights.append(
-                "Inventory looks healthy. No immediate stock alerts found."
-            )
+            insights.append("Inventory looks healthy. No immediate stock alerts found.")
 
-    return render(request, "analytics.html",{
+    return render(request, "smart_insights.html", {
+        "insights": insights,
         "total_products": total_products,
-        "inventory_value": round(float(inventory_value), 2),
+        "inventory_value": round(inventory_value, 2),
         "low_stock_count": low_stock_count,
-        "total_revenue": round(float(total_revenue), 2),
-        "best_sellers": list(best_sellers),
-        "top_inventory": top_inventory,
-        "average_profit": average_profit,
-        "restock_products": restock_products,
     })
 
 def update_product(request, id):
