@@ -29,7 +29,7 @@ ALLOWED_HOSTS = ['*']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['smartinventory-yful.onrender.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
