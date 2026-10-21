@@ -242,7 +242,7 @@ def sales(request):
         return redirect("sales")
 
     return render(request, "sales.html", {
-        "products": Product.objects.all()
+    "products": Product.objects.all()
     })
 
 
