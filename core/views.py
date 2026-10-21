@@ -10,6 +10,8 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from .models import Sale, SaleItem
 
+from django.contrib import messages
+
 from django.utils import timezone
 from django.db.models import Sum
 from .models import Product, Sale, SaleItem
@@ -73,6 +75,8 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
+
+            messages.success(request, "Registration successful! Welcome to SmartInventory.")
             return redirect("dashboard")
     else:
         form = UserCreationForm()
@@ -83,12 +87,19 @@ def register(request):
 # User login
 class UserLoginView(LoginView):
     template_name = "login.html"
+    
+    def form_valid(self, form):
+        messages.success(self.request, "Login successful! Welcome back.")
+        return super().form_valid(form)
 
 
 # User logout
 def logout_view(request):
     logout(request)
+    messages.success(request, "You have logged out successfully.")
     return redirect("home")
+
+
 
 
 # Categories

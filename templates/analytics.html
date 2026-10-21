@@ -81,68 +81,6 @@
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-    const stockLabels = [
-        {% for product in chart_products %}
-            "{{ product.name|escapejs }}",
-        {% endfor %}
-    ];
-
-    const stockValues = [
-        {% for product in chart_products %}
-            {{ product.current_stock }},
-        {% endfor %}
-    ];
-
-    const salesLabels = [
-        {% for name, quantity in best_sellers %}
-            "{{ name|escapejs }}",
-        {% endfor %}
-    ];
-
-    const salesValues = [
-        {% for name, quantity in best_sellers %}
-            {{ quantity }},
-        {% endfor %}
-    ];
-
-    new Chart(document.getElementById("stockChart"), {
-        type: "bar",
-        data: {
-            labels: stockLabels,
-            datasets: [{
-                label: "Units in Stock",
-                data: stockValues
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: { beginAtZero: true }
-            }
-        }
-    });
-
-    new Chart(document.getElementById("salesChart"), {
-        type: "bar",
-        data: {
-            labels: salesLabels,
-            datasets: [{
-                label: "Quantity Sold",
-                data: salesValues
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: { beginAtZero: true }
-            }
-        }
-    });
-</script>
-
 
 <div class="row g-4 mt-2">
 
