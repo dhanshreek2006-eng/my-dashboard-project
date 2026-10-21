@@ -1,0 +1,56 @@
+```html
+{% extends 'base.html' %}
+
+{% block title %}Suppliers{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4">Manage Suppliers</h2>
+
+<form method="POST" class="card p-4 mb-4">
+    {% csrf_token %}
+
+    <input class="form-control mb-3" name="name"
+           placeholder="Supplier Name" required>
+
+    <input class="form-control mb-3" name="phone"
+           placeholder="Phone Number" required>
+
+    <input class="form-control mb-3" type="email" name="email"
+           placeholder="Email Address" required>
+
+    <textarea class="form-control mb-3" name="address"
+              placeholder="Address" required></textarea>
+
+    <button class="btn btn-primary">Add Supplier</button>
+</form>
+
+<h4>Supplier List</h4>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Address</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for supplier in suppliers %}
+        <tr>
+            <td>{{ supplier.name }}</td>
+            <td>{{ supplier.phone }}</td>
+            <td>{{ supplier.email }}</td>
+            <td>{{ supplier.address }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No suppliers added yet.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
+```

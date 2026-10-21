@@ -1,0 +1,27 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <h2>Smart Insights</h2>
+    <p class="text-muted">
+        Automated inventory analysis for SmartMart Grocery Store
+    </p>
+
+    <div class="card shadow-sm mt-4">
+        <div class="card-header">
+            <h5 class="mb-0">Inventory Recommendations</h5>
+        </div>
+
+        <div class="card-body">
+            {% for insight in insights %}
+                <div class="alert alert-info mb-3">
+                    {{ insight }}
+                </div>
+            {% empty %}
+                <p>No insights available yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

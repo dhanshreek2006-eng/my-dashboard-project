@@ -1,0 +1,56 @@
+```html
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Update Product</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Product Name</label>
+        <input class="form-control mb-3" name="name"
+               value="{{ product.name }}" required>
+
+        <label>Category</label>
+        <select class="form-select mb-3" name="category" required>
+            {% for category in categories %}
+            <option value="{{ category.id }}"
+                {% if category.id == product.Category_id %}selected{% endif %}>
+                {{ category.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <label>Supplier</label>
+        <select class="form-select mb-3" name="supplier" required>
+            {% for supplier in suppliers %}
+            <option value="{{ supplier.id }}"
+                {% if supplier.id == product.Supplier_id %}selected{% endif %}>
+                {{ supplier.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <label>Purchase Price</label>
+        <input type="number" step="0.01" class="form-control mb-3"
+               name="purchase_price" value="{{ product.purchase_price }}" required>
+
+        <label>Selling Price</label>
+        <input type="number" step="0.01" class="form-control mb-3"
+               name="selling_price" value="{{ product.selling_price }}" required>
+
+        <label>Current Stock</label>
+        <input type="number" class="form-control mb-3"
+               name="current_stock" value="{{ product.current_stock }}" required>
+
+        <label>Minimum Stock</label>
+        <input type="number" class="form-control mb-3"
+               name="minimum_stock" value="{{ product.minimum_stock }}" required>
+
+        <button class="btn btn-primary" type="submit">Save Changes</button>
+        <a href="{% url 'products' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
+```

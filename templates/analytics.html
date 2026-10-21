@@ -1,0 +1,196 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-1">Analytical Reports</h2>
+    <p class="text-muted">SmartMart Grocery Store</p>
+
+    <div class="row g-3 mt-3">
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm p-3">
+                <p>Total Products</p>
+                <h3>{{ total_products }}</h3>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm p-3">
+                <p>Inventory Cost Value</p>
+                <h3>₹{{ inventory_value|floatformat:2 }}</h3>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm p-3">
+                <p>Low-Stock Products</p>
+                <h3>{{ low_stock_count }}</h3>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm p-3">
+                <p>Total Sales Revenue</p>
+                <h3>₹{{ total_revenue|floatformat:2 }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm p-4 mt-4">
+        <h4>Top 5 Best-Selling Products</h4>
+
+        {% if best_sellers %}
+            <table class="table table-striped mt-3">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity Sold</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for name, quantity in best_sellers %}
+                    <tr>
+                        <td>{{ name }}</td>
+                        <td>{{ quantity }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No sales recorded yet.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Inventory and Sales Charts -->
+<div class="row g-4 mt-2">
+
+    <div class="col-lg-6">
+        <div class="card shadow-sm p-4">
+            <h4>Current Stock Levels</h4>
+            <canvas id="stockChart"></canvas>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card shadow-sm p-4">
+            <h4>Best-Selling Products</h4>
+            <canvas id="salesChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const stockLabels = [
+        {% for product in chart_products %}
+            "{{ product.name|escapejs }}",
+        {% endfor %}
+    ];
+
+    const stockValues = [
+        {% for product in chart_products %}
+            {{ product.current_stock }},
+        {% endfor %}
+    ];
+
+    const salesLabels = [
+        {% for name, quantity in best_sellers %}
+            "{{ name|escapejs }}",
+        {% endfor %}
+    ];
+
+    const salesValues = [
+        {% for name, quantity in best_sellers %}
+            {{ quantity }},
+        {% endfor %}
+    ];
+
+    new Chart(document.getElementById("stockChart"), {
+        type: "bar",
+        data: {
+            labels: stockLabels,
+            datasets: [{
+                label: "Units in Stock",
+                data: stockValues
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    new Chart(document.getElementById("salesChart"), {
+        type: "bar",
+        data: {
+            labels: salesLabels,
+            datasets: [{
+                label: "Quantity Sold",
+                data: salesValues
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+
+
+<div class="row g-4 mt-2">
+
+    <div class="col-lg-6">
+        <div class="card shadow-sm p-4">
+            <h4>Restocking Recommendations</h4>
+
+            {% for product in restock_products %}
+                <div class="border-bottom py-2">
+                    <strong>{{ product.name }}</strong>
+                    <p class="mb-0">
+                        Current stock: {{ product.current_stock }} |
+                        Restock: {{ product.restock_quantity }} units
+                    </p>
+                </div>
+            {% empty %}
+                <p>All products meet their minimum stock levels.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card shadow-sm p-4">
+            <h4>Top 5 Inventory Investments</h4>
+
+            {% for product in top_inventory %}
+                <div class="border-bottom py-2">
+                    {{ product.name }}
+                    <strong class="float-end">
+                        ₹{{ product.stock_value|floatformat:2 }}
+                    </strong>
+                </div>
+            {% empty %}
+                <p>No inventory data available.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card shadow-sm p-4">
+            <h4>Average Profit Per Unit</h4>
+            <h3>₹{{ average_profit|floatformat:2 }}</h3>
+            <p class="text-muted mb-0">
+                Average selling price minus purchase price across products.
+            </p>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

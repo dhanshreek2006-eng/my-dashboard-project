@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard | Smart Inventory{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4">Business Dashboard</h2>
+<p class="text-muted">Overview of your inventory and sales performance.</p>
+
+<div class="row g-3 mb-4">
+
+    <div class="col-md-3">
+        <div class="card shadow-sm p-3">
+            <h6>Total Products</h6>
+            <h3>{{ total_products }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm p-3">
+            <h6>Total Stock Units</h6>
+            <h3>{{ total_stock }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm p-3">
+            <h6>Today's Sales</h6>
+            <h3>₹{{ today_sales|floatformat:2 }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm p-3">
+            <h6>Total Revenue</h6>
+            <h3>₹{{ total_revenue|floatformat:2 }}</h3>
+        </div>
+    </div>
+
+</div>
+
+<div class="row g-3">
+
+    <div class="col-md-6">
+        <div class="card shadow-sm p-3">
+            <h5>Low Stock Alerts</h5>
+            {% for product in low_stock_products %}
+                <p class="text-danger mb-2">
+                    {{ product.name }} — {{ product.current_stock }} units left
+                </p>
+            {% empty %}
+                <p class="text-success">No low-stock alerts.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm p-3">
+            <h5>Top-Selling Products</h5>
+            {% for product in top_selling_products %}
+                <p class="mb-2">
+                    {{ product.product__name }} — {{ product.total_sold }} sold
+                </p>
+            {% empty %}
+                <p class="text-muted">No sales recorded yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
