@@ -30,18 +30,88 @@ Smart Insights
 ## ✨ Key Features
 
 ### 🔐 Authentication & Security
-- User registration and login
+- User registration
+- Secure user login and authentication
 
 ### 📦 Inventory Management
-- Product management
-- Category and supplier management
-- Stock tracking
+- Add and manage products
+- Organize products by categories
+- Maintain supplier information
+- Track current stock levels
+- Monitor minimum stock levels
 
 ### 🛒 Sales Management
-- Record sales
-- Track inventory changes after sales
+- Record product sales
+- Select products and enter quantities
+- Automatically update stock after a successful sale
 
-### 📊 Dashboard & Smart Insights
-- Inventory overview dashboard
-- Smart Insights page
-- Analytics and reports
+### 📊 Dashboard
+- Centralized inventory overview
+- Quick access to inventory management sections
+
+### 💡 Smart Insights & Analytics
+- Dedicated Smart Insights page
+- Analytics and reports section
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|:---|:---|
+| Python | Backend programming |
+| Django | Web application framework |
+| HTML5 | Web page structure |
+| CSS3 | Styling |
+| Bootstrap 5 | Responsive user interface |
+| SQLite | Local development database |
+| PostgreSQL | Production database, when configured on Render |
+| Git & GitHub | Version control and source code management |
+| Render | Web application deployment |
+
+---
+
+## 🚀 Run Locally
+
+### 1. Clone the Repository
+```bash
+git clone YOUR_GITHUB_REPOSITORY_URL
+cd YOUR_PROJECT_FOLDER
+```
+
+### 2. Create a Virtual Environment
+```bash
+python -m venv .env
+```
+
+### 3. Activate the Environment (Windows)
+```bash
+.env\Scripts\activate
+```
+
+### 4. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Apply Database Migrations
+```bash
+python manage.py migrate
+```
+
+### 6. Start the Development Server
+```bash
+python manage.py runserver
+```
+
+Open http://127.0.0.1:8000/ in your browser.
+
+---
+
+## 👩‍💻 Author
+
+**Dhanshree Khare**
+
+*BCS Final-Year Student | Python & Django Developer*
+
+Developed as a portfolio project to apply Python, Django, database management, and responsive web development concepts.
