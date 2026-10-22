@@ -67,7 +67,6 @@ Smart Insights
 | SQLite | Local development database |
 | PostgreSQL | Production database, when configured on Render |
 | Git & GitHub | Version control and source code management |
-| Render | Web application deployment |
 
 ---
 
