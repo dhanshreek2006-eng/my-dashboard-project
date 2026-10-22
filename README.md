@@ -26,3 +26,22 @@ Smart Insights
 <img width="952" height="478" alt="image" src="https://github.com/user-attachments/assets/dbc0bf16-4dd2-4a6e-80b8-36f2e41d598b" />
 
 
+
+## ✨ Key Features
+
+### 🔐 Authentication & Security
+- User registration and login
+
+### 📦 Inventory Management
+- Product management
+- Category and supplier management
+- Stock tracking
+
+### 🛒 Sales Management
+- Record sales
+- Track inventory changes after sales
+
+### 📊 Dashboard & Smart Insights
+- Inventory overview dashboard
+- Smart Insights page
+- Analytics and reports
